@@ -8,12 +8,12 @@ import (
 
 func IsFile(path string) bool {
 	f, err := os.Stat(path)
-	return err != nil && !f.IsDir()
+	return err == nil && !f.IsDir()
 }
 
 func IsDir(path string) bool {
 	f, err := os.Stat(path)
-	return err != nil && f.IsDir()
+	return err == nil && f.IsDir()
 }
 
 func Exists(path string) bool {
