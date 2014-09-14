@@ -52,7 +52,7 @@ func WriteText(path string, text string) (int, error) {
 	return f.WriteString(text)
 }
 
-func GetText(path string) (string, error) {
+func ReadText(path string) (string, error) {
 	if !IsFile(file) {
 		return "", os.ErrNotExist
 	}
