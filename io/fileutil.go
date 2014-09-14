@@ -1,10 +1,8 @@
-package myio
+package io
 
 import (
 	"os"
-	"path"
 	"path/filepath"
-	"syscall"
 )
 
 func IsFile(path string) bool {
