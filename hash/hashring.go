@@ -37,6 +37,7 @@ func (h *HashRing) AddNode(n string, s int) {
 	tSpots := h.defaultSpots * s
 	sha := sha1.New()
 	for i := 1; i <= tSpots; i++ {
+		sha.Reset()
 		sha.Write([]byte(n + ":" + strconv.Itoa(i)))
 		hashBytes := sha.Sum(nil)
 
@@ -46,7 +47,6 @@ func (h *HashRing) AddNode(n string, s int) {
 		}
 
 		h.ticks = append(h.ticks, *n)
-		h.Reset()
 	}
 }
 
