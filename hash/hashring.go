@@ -35,10 +35,10 @@ func NewRing(n int) (h *HashRing) {
 // s: multiplier for default number of ticks (useful when one cache node has more resources, like RAM, than another)
 func (h *HashRing) AddNode(n string, s int) {
 	tSpots := h.defaultSpots * s
-	h := sha1.New()
+	sha := sha1.New()
 	for i := 1; i <= tSpots; i++ {
-		h.Write([]byte(n + ":" + strconv.Itoa(i)))
-		hashBytes := h.Sum(nil)
+		sha.Write([]byte(n + ":" + strconv.Itoa(i)))
+		hashBytes := sha.Sum(nil)
 
 		n := &node{
 			node: n,
@@ -56,9 +56,9 @@ func (h *HashRing) Bake() {
 }
 
 func (h *HashRing) Hash(s string) string {
-	h := sha1.New()
-	h.Write([]byte(s))
-	hashBytes := h.Sum(nil)
+	sha := sha1.New()
+	sha.Write([]byte(s))
+	hashBytes := sha.Sum(nil)
 	v := uint(hashBytes[19]) | uint(hashBytes[18])<<8 | uint(hashBytes[17])<<16 | uint(hashBytes[16])<<24
 	i := sort.Search(h.length, func(i int) bool { return h.ticks[i].hash >= v })
 
