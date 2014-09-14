@@ -3,6 +3,7 @@ package fileutil
 import (
 	"os"
 	"path/filepath"
+	"io/ioutil"
 )
 
 func IsFile(path string) bool {
@@ -22,7 +23,7 @@ func Exists(path string) bool {
 
 func EnsureDirExists(dirPaths ...string) {
 	for _, dirPath := range dirPaths {
-		if !IsExists(dirPath) {
+		if !Exists(dirPath) {
 			parentPath := filepath.Dir(dirPath)
 			parentInfo, err := os.Stat(parentPath)
 			if err != nil {
@@ -34,7 +35,7 @@ func EnsureDirExists(dirPaths ...string) {
 }
 
 func RemoveFile(path string) bool {
-	if IsExists(path) {
+	if Exists(path) {
 		err := os.Remove(path)
 		if err != nil {
 			return false
@@ -44,7 +45,7 @@ func RemoveFile(path string) bool {
 }
 
 func WriteText(path string, text string) (int, error) {
-	f, err := os.Create(file)
+	f, err := os.Create(path)
 	if err != nil {
 		return 0, err
 	}
@@ -53,10 +54,10 @@ func WriteText(path string, text string) (int, error) {
 }
 
 func ReadText(path string) (string, error) {
-	if !IsFile(file) {
+	if !IsFile(path) {
 		return "", os.ErrNotExist
 	}
-	b, e := ioutil.ReadFile(file)
+	b, e := ioutil.ReadFile(path)
 	if e != nil {
 		return "", e
 	}
