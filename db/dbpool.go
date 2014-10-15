@@ -44,7 +44,7 @@ func (this *DbPool) Get() (*sql.DB, error) {
 			if ok {
 				err := poolConn.ping()
 				if err != nil {
-					poolConn.conn = dbPool.newConn() //重新创建连接
+					poolConn.conn = this.newConn() //重新创建连接
 				}
 				poolConn.getTime = time.Now()
 				return poolConn.conn, nil
