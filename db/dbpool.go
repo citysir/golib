@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"errors"
 	"time"
 )
 
@@ -17,7 +18,7 @@ type DbPoolConn struct {
 	putTime time.Time
 }
 
-const PingIntervalDuration = 600 * time.Duration.Second
+var PingIntervalDuration = 600 * time.Duration.Second
 
 func NewDbPool(connectString string, poolSize int) (*DbPool, error) {
 	dbPool := &DbPool{connectString: connectString, poolSize: poolSize}
