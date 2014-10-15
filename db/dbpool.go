@@ -18,7 +18,7 @@ type DbPoolConn struct {
 	putTime time.Time
 }
 
-var PingIntervalDuration = 600 * time.Second
+var PingIntervalDuration = 900 * time.Second //15分钟ping一次
 
 func NewDbPool(connectString string, poolSize int) (*DbPool, error) {
 	dbPool := &DbPool{connectString: connectString, poolSize: poolSize}
