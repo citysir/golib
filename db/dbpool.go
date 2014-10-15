@@ -18,7 +18,7 @@ type DbPoolConn struct {
 	putTime time.Time
 }
 
-var PingIntervalDuration = 600 * time.Duration.Second
+var PingIntervalDuration = 600 * time.Second
 
 func NewDbPool(connectString string, poolSize int) (*DbPool, error) {
 	dbPool := &DbPool{connectString: connectString, poolSize: poolSize}
@@ -27,7 +27,7 @@ func NewDbPool(connectString string, poolSize int) (*DbPool, error) {
 		for i := 0; i < dbPool.poolSize; i++ {
 			conn, err := sql.Open("mysql", connectString)
 			if err != nil {
-				return nil, err
+				panic(err)
 			}
 			dbPool.Put(conn)
 			flag <- true
