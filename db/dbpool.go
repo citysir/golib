@@ -26,10 +26,7 @@ func NewDbPool(connectString string, poolSize int) (*DbPool, error) {
 	flag := make(chan bool, dbPool.poolSize)
 	go func() {
 		for i := 0; i < dbPool.poolSize; i++ {
-			conn, err := sql.Open("mysql", connectString)
-			if err != nil {
-				panic(err)
-			}
+			conn := dbPool.newConn()
 			dbPool.Put(conn)
 			flag <- true
 		}
@@ -45,9 +42,9 @@ func (this *DbPool) Get() (*sql.DB, error) {
 	case poolConn, ok := <-this.poolConns: //读取通道里的数据库连接，如果读不到就返回报错
 		{
 			if ok {
-				err := poolConn.Ping()
+				err := poolConn.ping()
 				if err != nil {
-					return nil, err //可以考虑重新创建连接
+					poolConn.conn = dbPool.newConn() //重新创建连接
 				}
 				poolConn.getTime = time.Now()
 				return poolConn.conn, nil
@@ -76,7 +73,15 @@ func (this *DbPool) Size() int {
 	return this.poolSize
 }
 
-func (this *DbPoolConn) Ping() error {
+func (this *DbPool) newConn() *sql.DB {
+	conn, err := sql.Open("mysql", this.connectString)
+	if err != nil {
+		panic(err)
+	}
+	return conn
+}
+
+func (this *DbPoolConn) ping() error {
 	if time.Now().After(this.putTime.Add(PingIntervalDuration)) {
 		return this.conn.Ping()
 	}
