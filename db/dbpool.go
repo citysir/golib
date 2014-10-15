@@ -22,6 +22,7 @@ var PingIntervalDuration = 600 * time.Second
 
 func NewDbPool(connectString string, poolSize int) (*DbPool, error) {
 	dbPool := &DbPool{connectString: connectString, poolSize: poolSize}
+	dbPool.poolConns = make(chan *DbPoolConn, dbPool.poolSize)
 	flag := make(chan bool, dbPool.poolSize)
 	go func() {
 		for i := 0; i < dbPool.poolSize; i++ {
