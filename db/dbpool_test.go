@@ -1,6 +1,7 @@
 package db
 
 import (
+	_ "github.com/Go-SQL-Driver/MySQL"
 	"testing"
 )
 
